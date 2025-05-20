@@ -1,45 +1,43 @@
 #!/bin/bash
-# 一键安装脚本：支持 CentOS 7/8，自动检测系统和安装宝塔
-
 set -e
 
 echo "🔍 开始系统检测..."
 
-# -----------------------------
-# 第一步：检测是否是 CentOS 7 / 8
-# -----------------------------
-if [[ -f /etc/centos-release ]]; then
-    version=$(rpm -q --queryformat '%{VERSION}' centos-release)
-    if [[ "$version" == "7" || "$version" == "8" ]]; then
-        echo "✅ 当前系统为 CentOS $version"
-    else
-        echo "❌ 不支持的 CentOS 版本：$version，仅支持 CentOS 7 和 8"
-        exit 1
-    fi
+# 获取系统版本
+version=""
+if grep -qi centos /etc/os-release; then
+    version=$(grep -oP '(?<=VERSION_ID="?)\d+' /etc/os-release | head -1)
+    echo "✅ 检测到系统为 CentOS $version"
 else
-    echo "❌ 非 CentOS 系统，安装终止"
-    exit 1
+    echo "⚠️ 未检测到 CentOS 系统"
 fi
 
-# -----------------------------
-# 第二步：检测是否安装宝塔面板
-# -----------------------------
+# 系统版本交互确认
 echo ""
-echo "🧩 正在检测是否已安装宝塔面板..."
+read -rp "👉 是否继续执行安装脚本？(y/n): " confirm
+if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
+    echo "⛔ 已取消执行，退出脚本。"
+    exit 0
+fi
 
+echo ""
+echo "🧩 开始检测宝塔面板是否已安装..."
+
+# 检测宝塔是否已安装
 if [ -d "/www/server/panel" ]; then
-    echo "✅ 宝塔面板已安装"
+    echo "✅ 检测到宝塔已安装：/www/server/panel 存在"
 else
-    echo "⚠️  宝塔未安装，是否安装？(y/n)"
-    read -p "请输入你的选择：" confirm
-    if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
+    echo "⚠️ 未检测到宝塔面板"
+    read -rp "👉 是否现在安装宝塔？(y/n): " bt_confirm
+    if [[ "$bt_confirm" == "y" || "$bt_confirm" == "Y" ]]; then
         echo "🚀 开始安装宝塔..."
         yum install -y wget
-        wget -O install.sh http://bt.ng-os.com/install/install_6.0.sh && sh install.sh
+        wget -O install.sh http://bt.ng-os.com/install/install_6.0.sh
+        bash install.sh
     else
-        echo "⛔ 已取消安装宝塔"
+        echo "⛔ 跳过宝塔安装"
     fi
 fi
 
 echo ""
-echo "🎉 初始安装流程已完成，后续功能请继续扩展..."
+echo "🎉 安装流程完成！后续你可以继续添加 LNMP、项目部署等步骤。"
