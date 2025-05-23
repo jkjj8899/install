@@ -1,0 +1,159 @@
+yum install -y git
+
+
+curl -O https://raw.githubusercontent.com/jkjj8899/install/master/install.sh
+
+
+
+
+chmod +x install.sh
+
+
+php8.1 扩展igbinary redis  fileinfo  禁用函数：pcntl_alarm，pcntl_signal，pcntl_fork，pcntl_wait，pcntl_waitpid，proc_open
+mysql5.7 
+redis 
+nginx1.24
+
+解析域名：gl api ws h5 www
+
+添加站点：gl api放一起，一个后端，一个api
+
+其他添加对应的独立站点，H5手机端，www pc端
+
+
+cd 到 gl后端目录
+下载后端文件---wget -O gl.3xex.com_m7dM7w.tar.gz "https://pub-8e1462aa69c845b19469cdbcc1341525.r2.dev/gl.3xex.com_m7dM7w.tar.gz"
+
+解压文件--tar -zxvf gl.3xex.com_m7dM7w.tar.gz
+
+手动创建数据库，
+
+下载数据库文件：cd /www/backup/database
+
+wget -O db_backup.sql.gz "https://pub-8e1462aa69c845b19469cdbcc1341525.r2.dev/gl_3xex_com_2025-03-11_13-22-10_mysql_data.sql.gz"
+
+手动导入数据库
+
+配置后端：伪静态：location / {
+    try_files $uri $uri/ /index.php?$query_string;
+}
+
+运行目录public
+
+//进入到根目录，更新密钥
+php artisan
+php artisan key:generate   
+php artisan config:cache   
+
+
+在/config/app.php中更换为自己的后端域名
+
+
+ws域名配置伪静态：
+location /{
+  #内网websocket 端口及地址 
+  proxy_pass http://127.0.0.1:2003/; 
+  proxy_set_header Upgrade $http_upgrade; 
+  proxy_set_header Connection "upgrade";
+  proxy_http_version 1.1;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header Host $host;
+}
+
+=======================
+
+导入前端：
+
+pc端：cd到PC端目录：wget -O 3xex.com_pP5Nce.tar.gz "https://pub-8e1462aa69c845b19469cdbcc1341525.r2.dev/3xex.com_pP5Nce.tar.gz"
+
+tar -zxvf 3xex.com_pP5Nce.tar.gz
+
+手机端：cd到手机端目录：wget -O h5.3xex.com_WsH3ep.tar.gz "https://pub-8e1462aa69c845b19469cdbcc1341525.r2.dev/h5.3xex.com_WsH3ep.tar.gz"
+
+tar -zxvf h5.3xex.com_WsH3ep.tar.gz
+
+前端伪静态设置：
+location / {
+    try_files $uri /index.html;
+}
+
+前端全局搜索 ws.3xex.com 域名更换为自己的域名
+
+前端全局搜索 api.3xex.com 域名更换为自己的域名
+======================================================
+
+添加任务：
+
+清理日志：shell脚本，周期每天1:30
+cat /dev/null > /var/log/boot.log
+cat /dev/null > /var/log/btmp
+cat /dev/null > /var/log/cron
+cat /dev/null > /var/log/dmesg
+cat /dev/null > /var/log/firewalld
+cat /dev/null > /var/log/grubby
+cat /dev/null > /var/log/lastlog
+cat /dev/null > /var/log/mail.info
+cat /dev/null > /var/log/maillog
+cat /dev/null > /var/log/messages
+cat /dev/null > /var/log/secure
+cat /dev/null > /var/log/spooler
+cat /dev/null > /var/log/syslog
+cat /dev/null > /var/log/tallylog
+cat /dev/null > /var/log/wpa_supplicant.log
+cat /dev/null > /var/log/wtmp
+cat /dev/null > /var/log/yum.log
+
+理财：访问url  周期每天：12.59
+
+https://api.3xex.com/financial/income
+
+gatewaywoker： shell 周期每天 18:30
+
+su -s /bin/bash - www <<EOF
+cd /www/wwwroot/gl.scfreeg.com/
+php artisan gateway-worker:server restart
+EOF
+
+
+K先处理
+周期每天1:30
+su -s /bin/bash - www <<EOF
+cd /www/wwwroot/gl.scfreeg.com/
+php artisan queue:work --queue
+EOF
+
+平仓处理：
+
+周期每天16:30
+
+su -s /bin/bash - www <<EOF
+cd /www/wwwroot/gl.scfreeg.com/
+php artisan queue:work --queue=order
+EOF
+
+===========================================
+
+
+下载页面，解析app
+
+cd 到下载目录
+
+wget -O app.bitbanke.xyz.tar.gz "https://pub-8e1462aa69c845b19469cdbcc1341525.r2.dev/app.bitbanke.xyz_3tYrJJ.tar.gz" && \
+tar -zxvf app.bitbanke.xyz.tar.gz
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
